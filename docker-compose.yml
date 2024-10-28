@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "8080:80"
+    depends_on:
+      - mongo
+      - mongo-express
+
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - "C:/data/db:/data/db"    # Maps local directory to MongoDB data directory in the container
+
+  mongo-express:
+    image: mongo-express
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongo
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_BASICAUTH_USERNAME: admin       # Optional: set username for basic auth
+      ME_CONFIG_BASICAUTH_PASSWORD: password    # Optional: set password for basic auth
+
+volumes:
+  mongo-data:
